@@ -1,1 +1,29 @@
-<p>reservations works!</p>
+<h2>Reserve Parking Slot</h2>
+
+<p><strong>Selected Slot ID:</strong> {{ form.slotId }}</p>
+
+<div style="margin-bottom:10px;">
+  <label>Start Time:</label>
+  <input type="datetime-local" [(ngModel)]="form.start_time" name="start_time">
+</div>
+
+<div style="margin-bottom:10px;">
+  <label>End Time:</label>
+  <input type="datetime-local" [(ngModel)]="form.end_time" name="end_time">
+</div>
+
+<button (click)="reserve()">Confirm Reservation</button>
+
+<hr>
+
+<h2>My Reservations</h2>
+
+<div *ngFor="let r of myReservations" style="border:1px solid #ccc; padding:12px; margin-bottom:10px;">
+  <p><strong>ID:</strong> {{ r.id_reservation }}</p>
+  <p><strong>Slot:</strong> {{ r.slotId }}</p>
+  <p><strong>Start:</strong> {{ r.start_time }}</p>
+  <p><strong>End:</strong> {{ r.end_time }}</p>
+  <p><strong>Status:</strong> {{ r.status }}</p>
+
+  <button (click)="cancelReservation(r.id_reservation)">Cancel</button>
+</div>

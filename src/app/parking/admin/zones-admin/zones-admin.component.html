@@ -1,0 +1,17 @@
+<h2>Admin - Parking Zones</h2>
+
+<form (ngSubmit)="saveZone()">
+  <input [(ngModel)]="form.name" name="name" placeholder="Zone name" required>
+  <input [(ngModel)]="form.location" name="location" placeholder="Location" required>
+  <input [(ngModel)]="form.description" name="description" placeholder="Description" required>
+  <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
+  <button type="button" (click)="resetForm()">Reset</button>
+</form>
+
+<hr>
+
+<div *ngFor="let zone of zones">
+  <strong>{{ zone.name }}</strong> - {{ zone.location }} - {{ zone.description }}
+  <button (click)="editZone(zone)">Edit</button>
+  <button (click)="deleteZone(zone.id_zone)">Delete</button>
+</div>

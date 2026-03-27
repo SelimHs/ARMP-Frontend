@@ -1,0 +1,11 @@
+<h2>Admin - Parking Reservations</h2>
+
+<div *ngFor="let r of reservations">
+  <strong>Reservation #{{ r.id_reservation }}</strong>
+  | User: {{ r.userId }}
+  | Slot: {{ r.slotId }}
+  | Start: {{ r.start_time }}
+  | End: {{ r.end_time }}
+  | Status: {{ r.status }}
+  <button (click)="deleteReservation(r.id_reservation)">Delete</button>
+</div>

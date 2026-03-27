@@ -1,0 +1,42 @@
+<h2>Admin - Parking Slots</h2>
+
+<form (ngSubmit)="saveSlot()">
+  <input [(ngModel)]="form.slot_number" name="slot_number" placeholder="Slot number" required>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="form.is_covered" name="is_covered">
+    Covered
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="form.is_ev_charging" name="is_ev_charging">
+    EV Charging
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="form.is_available" name="is_available">
+    Available
+  </label>
+
+  <select [(ngModel)]="form.zoneId" name="zoneId" required>
+    <option [ngValue]="undefined">Select zone</option>
+    <option *ngFor="let zone of zones" [ngValue]="zone.id_zone">
+      {{ zone.name }}
+    </option>
+  </select>
+
+  <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
+  <button type="button" (click)="resetForm()">Reset</button>
+</form>
+
+<hr>
+
+<div *ngFor="let slot of slots">
+  <strong>{{ slot.slot_number }}</strong>
+  | Zone: {{ slot.zone?.name }}
+  | Covered: {{ slot.is_covered }}
+  | EV: {{ slot.is_ev_charging }}
+  | Available: {{ slot.is_available }}
+  <button (click)="editSlot(slot)">Edit</button>
+  <button (click)="deleteSlot(slot.id_slot)">Delete</button>
+</div>

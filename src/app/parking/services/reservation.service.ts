@@ -1,18 +1,35 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ParkingReservation } from '../models/reservation.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
-
-  private API = 'http://localhost:8082/api/parking-reservations';
+  private api = 'http://localhost:8082/api/parkingreservations';
 
   constructor(private http: HttpClient) {}
 
-  getAll() {
-    return this.http.get<any[]>(this.API);
+  getAll(): Observable<ParkingReservation[]> {
+    return this.http.get<ParkingReservation[]>(this.api);
   }
 
-  create(reservation: any) {
-    return this.http.post(this.API, reservation);
+  getById(id: number): Observable<ParkingReservation> {
+    return this.http.get<ParkingReservation>(`${this.api}/${id}`);
+  }
+
+  getByUser(userId: number): Observable<ParkingReservation[]> {
+    return this.http.get<ParkingReservation[]>(`${this.api}/user/${userId}`);
+  }
+
+  create(reservation: ParkingReservation): Observable<ParkingReservation> {
+    return this.http.post<ParkingReservation>(this.api, reservation);
+  }
+
+  update(id: number, reservation: ParkingReservation): Observable<ParkingReservation> {
+    return this.http.put<ParkingReservation>(`${this.api}/${id}`, reservation);
+  }
+
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.api}/${id}`);
   }
 }
