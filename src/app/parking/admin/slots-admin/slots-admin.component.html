@@ -1,42 +1,159 @@
-<h2>Admin - Parking Slots</h2>
+<div class="container mt-4">
 
-<form (ngSubmit)="saveSlot()">
-  <input [(ngModel)]="form.slot_number" name="slot_number" placeholder="Slot number" required>
+  <!-- TITLE -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold">🅿️ Parking Slots Management</h2>
+  </div>
 
-  <label>
-    <input type="checkbox" [(ngModel)]="form.is_covered" name="is_covered">
-    Covered
-  </label>
+  <!-- FORM -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
 
-  <label>
-    <input type="checkbox" [(ngModel)]="form.is_ev_charging" name="is_ev_charging">
-    EV Charging
-  </label>
+      <h5 class="card-title mb-3">
+        {{ editingId ? '✏️ Edit Slot' : '➕ Add New Slot' }}
+      </h5>
 
-  <label>
-    <input type="checkbox" [(ngModel)]="form.is_available" name="is_available">
-    Available
-  </label>
+      <form (ngSubmit)="saveSlot()" class="row g-3">
 
-  <select [(ngModel)]="form.zoneId" name="zoneId" required>
-    <option [ngValue]="undefined">Select zone</option>
-    <option *ngFor="let zone of zones" [ngValue]="zone.id_zone">
-      {{ zone.name }}
-    </option>
-  </select>
+        <!-- SLOT NUMBER -->
+        <div class="col-md-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Slot number"
+            [(ngModel)]="form.slot_number"
+            name="slot_number"
+            required>
+        </div>
 
-  <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
-  <button type="button" (click)="resetForm()">Reset</button>
-</form>
+        <!-- ZONE -->
+        <div class="col-md-3">
+          <select
+            class="form-select"
+            [(ngModel)]="form.zoneId"
+            name="zoneId"
+            required>
+            <option [ngValue]="undefined">Select zone</option>
+            <option *ngFor="let zone of zones" [ngValue]="zone.id_zone">
+              {{ zone.name }}
+            </option>
+          </select>
+        </div>
 
-<hr>
+        <!-- CHECKBOXES -->
+        <div class="col-md-6 d-flex align-items-center gap-4">
 
-<div *ngFor="let slot of slots">
-  <strong>{{ slot.slot_number }}</strong>
-  | Zone: {{ slot.zone?.name }}
-  | Covered: {{ slot.is_covered }}
-  | EV: {{ slot.is_ev_charging }}
-  | Available: {{ slot.is_available }}
-  <button (click)="editSlot(slot)">Edit</button>
-  <button (click)="deleteSlot(slot.id_slot)">Delete</button>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   [(ngModel)]="form.is_covered"
+                   name="is_covered">
+            <label class="form-check-label">Covered</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   [(ngModel)]="form.is_ev_charging"
+                   name="is_ev_charging">
+            <label class="form-check-label">EV Charging</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   [(ngModel)]="form.is_available"
+                   name="is_available">
+            <label class="form-check-label text-success">Available</label>
+          </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="col-12 d-flex gap-2">
+          <button class="btn btn-success">
+            {{ editingId ? 'Update' : 'Add' }}
+          </button>
+
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="resetForm()">
+            Reset
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <h5 class="card-title mb-3">📋 Slots List</h5>
+
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Slot</th>
+            <th>Zone</th>
+            <th>Covered</th>
+            <th>EV</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let slot of slots; let i = index">
+
+            <td>{{ i + 1 }}</td>
+
+            <td class="fw-bold">
+              {{ slot.slot_number }}
+            </td>
+
+            <td>
+              {{ slot.zone?.name }}
+            </td>
+
+            <td>
+              <span class="badge bg-secondary" *ngIf="slot.is_covered">Yes</span>
+              <span class="badge bg-light text-dark" *ngIf="!slot.is_covered">No</span>
+            </td>
+
+            <td>
+              <span class="badge bg-info" *ngIf="slot.is_ev_charging">Yes</span>
+              <span class="badge bg-light text-dark" *ngIf="!slot.is_ev_charging">No</span>
+            </td>
+
+            <td>
+              <span class="badge bg-success" *ngIf="slot.is_available">Available</span>
+              <span class="badge bg-danger" *ngIf="!slot.is_available">Occupied</span>
+            </td>
+
+            <td class="text-end">
+              <button class="btn btn-sm btn-warning me-2"
+                      (click)="editSlot(slot)">
+                ✏️ Edit
+              </button>
+
+              <button class="btn btn-sm btn-danger"
+        (click)="deleteSlot(slot.id_slot)">
+  🗑 Delete
+</button>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="slots.length === 0">
+            <td colspan="7" class="text-center text-muted">
+              No slots found
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
 </div>

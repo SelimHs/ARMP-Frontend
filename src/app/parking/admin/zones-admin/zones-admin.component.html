@@ -1,17 +1,111 @@
-<h2>Admin - Parking Zones</h2>
+<div class="container mt-4">
 
-<form (ngSubmit)="saveZone()">
-  <input [(ngModel)]="form.name" name="name" placeholder="Zone name" required>
-  <input [(ngModel)]="form.location" name="location" placeholder="Location" required>
-  <input [(ngModel)]="form.description" name="description" placeholder="Description" required>
-  <button type="submit">{{ editingId ? 'Update' : 'Add' }}</button>
-  <button type="button" (click)="resetForm()">Reset</button>
-</form>
+  <!-- TITLE -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold">🚗 Parking Zones Management</h2>
+  </div>
 
-<hr>
+  <!-- FORM CARD -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
 
-<div *ngFor="let zone of zones">
-  <strong>{{ zone.name }}</strong> - {{ zone.location }} - {{ zone.description }}
-  <button (click)="editZone(zone)">Edit</button>
-  <button (click)="deleteZone(zone.id_zone)">Delete</button>
+      <h5 class="card-title mb-3">
+        {{ editingId ? '✏️ Edit Zone' : '➕ Add New Zone' }}
+      </h5>
+
+      <form (ngSubmit)="saveZone()" class="row g-3">
+
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Zone name"
+            [(ngModel)]="form.name"
+            name="name"
+            required>
+        </div>
+
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Location"
+            [(ngModel)]="form.location"
+            name="location"
+            required>
+        </div>
+
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Description"
+            [(ngModel)]="form.description"
+            name="description"
+            required>
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+          <button class="btn btn-success">
+            {{ editingId ? 'Update' : 'Add' }}
+          </button>
+
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">
+            Reset
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <h5 class="card-title mb-3">📍 Zones List</h5>
+
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let zone of zones; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td class="fw-bold">{{ zone.name }}</td>
+            <td>{{ zone.location }}</td>
+            <td>{{ zone.description }}</td>
+
+            <td class="text-end">
+              <button class="btn btn-sm btn-warning me-2"
+                      (click)="editZone(zone)">
+                ✏️ Edit
+              </button>
+
+              <button class="btn btn-sm btn-danger"
+                      (click)="deleteZone(zone.id_zone)">
+                🗑 Delete
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="zones.length === 0">
+            <td colspan="5" class="text-center text-muted">
+              No zones found
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
 </div>

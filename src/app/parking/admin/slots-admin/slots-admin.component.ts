@@ -65,10 +65,17 @@ export class SlotsAdminComponent implements OnInit {
     this.editingId = slot.id_slot || null;
   }
 
-  deleteSlot(id?: number): void {
-    if (!id) return;
-    this.slotService.delete(id).subscribe(() => this.loadSlots());
-  }
+  deleteSlot(id?: number) {
+  if (!id) return;
+
+  if (!confirm('Delete this slot?')) return;
+
+  this.slotService.delete(id).subscribe(() => {
+    this.loadSlots();
+  });
+} 
+
+
 
   resetForm(): void {
     this.form = {
