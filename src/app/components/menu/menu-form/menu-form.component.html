@@ -1,0 +1,88 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">{{ isEditMode ? 'Modifier le Menu' : 'Nouveau Menu' }}</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label class="form-label">Semaine (Sélectionner une plage de dates)</label>
+                <input type="week" class="form-control" formControlName="semaine">
+                <small class="text-muted">Sélectionnez la semaine dans le calendrier (ex: 2026-W12 pour semaine 12 de 2026)</small>
+                <div *ngIf="menuForm.get('semaine')?.invalid && menuForm.get('semaine')?.touched" class="text-danger">
+                  La semaine est requise
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Jour</label>
+                <select class="form-select" formControlName="jour">
+                  <option value="">Sélectionner un jour</option>
+                  <option value="lundi">Lundi</option>
+                  <option value="mardi">Mardi</option>
+                  <option value="mercredi">Mercredi</option>
+                  <option value="jeudi">Jeudi</option>
+                  <option value="vendredi">Vendredi</option>
+                  <option value="samedi">Samedi</option>
+                  <option value="dimanche">Dimanche</option>
+                </select>
+                <div *ngIf="menuForm.get('jour')?.invalid && menuForm.get('jour')?.touched" class="text-danger">
+                  Le jour est requis
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Places disponibles</label>
+                <input type="number" class="form-control" formControlName="nombre_disponible" min="0">
+                <small class="text-muted">Nombre maximum de réservations pour ce menu</small>
+                <div *ngIf="menuForm.get('nombre_disponible')?.invalid && menuForm.get('nombre_disponible')?.touched" class="text-danger">
+                  Le nombre doit être supérieur ou égal à 0
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Entrée</label>
+                <input type="text" class="form-control" formControlName="entree">
+                <div *ngIf="menuForm.get('entree')?.invalid && menuForm.get('entree')?.touched" class="text-danger">
+                  L'entrée est requise
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Plat principal</label>
+                <input type="text" class="form-control" formControlName="plat_principal">
+                <div *ngIf="menuForm.get('plat_principal')?.invalid && menuForm.get('plat_principal')?.touched" class="text-danger">
+                  Le plat principal est requis
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Dessert</label>
+                <input type="text" class="form-control" formControlName="dessert">
+                <div *ngIf="menuForm.get('dessert')?.invalid && menuForm.get('dessert')?.touched" class="text-danger">
+                  Le dessert est requis
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isEditMode ? 'Modifier' : 'Créer' }}
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" routerLink="/menus">Annuler</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

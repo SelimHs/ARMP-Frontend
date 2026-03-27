@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Liste des Réservations de Menus</h2>
+    <button class="btn btn-success" routerLink="/reservationmenus/new">
+      + Nouvelle Réservation
+    </button>
+  </div>
+  
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="table-responsive" *ngIf="!loading && reservationMenus.length > 0">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Client</th>
+          <th>Menu</th>
+          <th>Date</th>
+          <th>À emporter</th>
+          <th>Heure</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let res of reservationMenus">
+          <td>{{ res.id_reservation }}</td>
+          <td>
+            <strong>{{ res.user.nom }}</strong><br>
+            <small class="text-muted">{{ res.user.email }}</small>
+          </td>
+          <td>
+            <strong>{{ res.menu.plat_principal }}</strong><br>
+            <small class="text-muted">{{ res.menu.jour }} - {{ res.menu.entree }}</small>
+          </td>
+          <td>{{ formatDate(res.date_reservation) }}</td>
+          <td>
+            <span class="badge" [ngClass]="res.a_emporter ? 'bg-success' : 'bg-secondary'">
+              {{ res.a_emporter ? 'Oui' : 'Non' }}
+            </span>
+          </td>
+          <td>{{ formatTime(res.heure_recuperation) }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteReservation(res.id_reservation!)">
+              🗑️ Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && reservationMenus.length === 0" class="alert alert-info">
+    Aucune réservation de menu
+  </div>
+</div>

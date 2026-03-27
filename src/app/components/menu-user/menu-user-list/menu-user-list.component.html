@@ -1,0 +1,105 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🍽️ Menus du Restaurant Universitaire</h2>
+  </div>
+  
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="row" *ngIf="!loading && menus.length > 0">
+    <div class="col-md-4 mb-4" *ngFor="let menu of menus">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">{{ menu.jour | titlecase }}</h4>
+          <small>{{ formatWeekRange(menu.semaine) }}</small>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge bg-secondary">🥗 Entrée</span>
+              <span class="fw-bold">{{ menu.entree }}</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge bg-success">🍽️ Plat principal</span>
+              <span class="fw-bold">{{ menu.plat_principal }}</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge bg-warning text-dark">🍰 Dessert</span>
+              <span class="fw-bold">{{ menu.dessert }}</span>
+            </div>
+          </div>
+          
+          <ng-container *ngIf="allergenAnalyses.get(menu.id_menu!) as analysis">
+            <div *ngIf="analysis.hasAllergens" class="alert alert-warning mt-2">
+              <div class="d-flex align-items-start">
+                <span style="font-size: 1.2rem;">⚠️</span>
+                <div class="ms-2">
+                  <strong>Allergènes détectés :</strong>
+                  <div class="mt-1">
+                    <div *ngFor="let allergen of analysis.detectedAllergens" class="mb-1">
+                      <span class="badge bg-danger me-1">{{ allergen.emoji }}</span>
+                      <strong>{{ allergen.allergenName }}</strong>
+                      <small class="text-muted"> ({{ allergen.detectedIn }})</small>
+                    </div>
+                  </div>
+                  <small class="text-muted">{{ analysis.warningMessage }}</small>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="!analysis.hasAllergens" class="alert alert-success mt-2">
+              <div class="d-flex align-items-center">
+                <span style="font-size: 1.2rem;">✅</span>
+                <div class="ms-2">
+                  <strong>Aucun allergène détecté</strong>
+                  <div>{{ analysis.warningMessage }}</div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          
+          <div class="alert alert-info mt-3">
+            <div class="d-flex justify-content-between">
+              <span>👥 Places disponibles :</span>
+              <span class="fw-bold" 
+                    [ngClass]="(availabilities.get(menu.id_menu!)?.remaining ?? 0) > 0 ? 'text-success' : 'text-danger'">
+                {{ availabilities.get(menu.id_menu!)?.remaining ?? 0 }} / {{ availabilities.get(menu.id_menu!)?.total ?? menu.nombre_disponible }}
+              </span>
+            </div>
+          </div>
+          
+          <div *ngIf="availabilities.get(menu.id_menu!)?.alreadyReserved" class="alert alert-success text-center">
+            ✅ Vous avez déjà réservé ce menu
+          </div>
+        </div>
+        <div class="card-footer bg-transparent">
+          <button 
+            class="btn btn-success w-100" 
+            (click)="reserveMenu(menu.id_menu!)"
+            [disabled]="!availabilities.get(menu.id_menu!)?.available || availabilities.get(menu.id_menu!)?.alreadyReserved">
+            📅 Réserver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && menus.length === 0" class="alert alert-info text-center">
+    Aucun menu disponible pour le moment
+  </div>
+</div>
+
+<app-chatbot 
+  [menus]="menus"
+  [selectedDate]="selectedDate"
+  (bookingCompleted)="onBookingCompleted()">
+</app-chatbot>
