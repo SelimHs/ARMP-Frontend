@@ -29,9 +29,9 @@ export class ReservationService {
     return this.http.put<ParkingReservation>(`${this.api}/${id}`, reservation);
   }
 
-  delete(id: number): Observable<any> {
-    return this.http.delete(`${this.api}/${id}`);
-  }
+delete(id: number) {
+  return this.http.delete(`${this.api}/${id}`, { responseType: 'text' });
+}
   updateStatus(id: number, status: string) {
   return this.http.put(
     `${this.api}/${id}/status?status=${status}`,

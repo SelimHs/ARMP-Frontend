@@ -22,7 +22,7 @@
 
         <tbody>
 
-          <tr *ngFor="let r of reservations; let i = index">
+          <tr *ngFor="let r of reservations; let i = index; trackBy: trackByReservation">
 
             <td>{{ i + 1 }}</td>
 
@@ -64,9 +64,9 @@
             <!-- DELETE -->
             <td class="text-end">
               <button class="btn btn-sm btn-danger"
-                      (click)="deleteReservation(r.id_reservation)">
-                🗑 Delete
-              </button>
+        (click)="deleteReservation($any(r.id_reservation))">
+  🗑 Delete
+</button>
             </td>
 
           </tr>

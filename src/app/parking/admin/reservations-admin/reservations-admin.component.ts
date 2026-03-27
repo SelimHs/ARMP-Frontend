@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { ParkingReservation } from '../../models/reservation.model';
+import { ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-reservations-admin',
@@ -9,7 +10,10 @@ import { ParkingReservation } from '../../models/reservation.model';
 export class ReservationsAdminComponent implements OnInit {
   reservations: ParkingReservation[] = [];
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef) {}
+  trackByReservation(index: number, item: any): number {
+  return Number(item.id_reservation);
+}
 
   statuses = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'];
   ngOnInit(): void {
@@ -20,19 +24,21 @@ export class ReservationsAdminComponent implements OnInit {
     this.reservationService.getAll().subscribe(data => this.reservations = data);
   }
 
-  deleteReservation(id?: number) {
-  if (!id) return;
+  deleteReservation(id: number) {
 
   if (!confirm('Delete this reservation?')) return;
 
   this.reservationService.delete(id).subscribe({
     next: () => {
-      console.log('Deleted');
 
-      // 🔥 REMOVE FROM UI INSTANTLY
-      this.reservations = this.reservations.filter(
-        r => r.id_reservation !== id
-      );
+      console.log('Deleting ID:', id);
+
+      // 🔥 FORCE FULL RELOAD (SAFE VERSION)
+      this.reservationService.getAll().subscribe(data => {
+        this.reservations = data;
+        console.log('Updated list:', this.reservations);
+      });
+
     },
     error: (err) => console.error(err)
   });
