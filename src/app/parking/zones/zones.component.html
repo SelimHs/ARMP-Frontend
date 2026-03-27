@@ -1,0 +1,51 @@
+<div class="container mt-4">
+
+  <!-- TITLE -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">🅿️ Parking Zones</h2>
+  </div>
+
+  <!-- ZONES GRID -->
+  <div class="row">
+
+    <div class="col-md-4 mb-4" *ngFor="let zone of zones">
+
+      <div class="card shadow-sm h-100 zone-card">
+
+        <div class="card-body d-flex flex-column">
+
+          <!-- NAME -->
+          <h5 class="card-title fw-bold">
+            {{ zone.name }}
+          </h5>
+
+          <!-- LOCATION -->
+          <p class="text-muted mb-1">
+            📍 {{ zone.location }}
+          </p>
+
+          <!-- DESCRIPTION -->
+          <p class="flex-grow-1">
+            {{ zone.description }}
+          </p>
+
+          <!-- BUTTON -->
+          <button class="btn btn-primary w-100 mt-3"
+                  (click)="openSlots(zone.id_zone)">
+            🚗 View Slots
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="zones.length === 0" class="text-center text-muted mt-5">
+    No parking zones available
+  </div>
+
+</div>

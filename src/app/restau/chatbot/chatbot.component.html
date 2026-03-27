@@ -1,0 +1,50 @@
+<div class="chatbot-toggle" *ngIf="minimized" (click)="toggleMinimize()">
+  <span class="toggle-icon">💬</span>
+  <span class="toggle-text">Assistant</span>
+</div>
+
+<div class="chatbot-window" [class.minimized]="minimized">
+  <div class="chatbot-header">
+    <div class="chatbot-header-info">
+      <span class="chatbot-avatar">🤖</span>
+      <div>
+        <h4>Assistant Réservation</h4>
+        <p>En ligne • Répond instantanément</p>
+      </div>
+    </div>
+    <div class="chatbot-actions">
+      <button class="chatbot-minimize" (click)="toggleMinimize()">−</button>
+    </div>
+  </div>
+  
+  <div class="chatbot-messages" #chatMessages>
+    <div *ngFor="let msg of messages" class="message-wrapper" [ngClass]="msg.sender">
+      <div class="message-bubble">
+        <div class="message-text" [innerHTML]="msg.text | nl2br"></div>
+        <div class="message-time">{{ msg.timestamp | date:'HH:mm' }}</div>
+      </div>
+    </div>
+    
+    <div *ngIf="loading" class="message-wrapper bot">
+      <div class="message-bubble typing-indicator">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="chatbot-input">
+    <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+      <input type="text" formControlName="message" placeholder="Écrivez votre message..." autocomplete="off">
+      <button type="submit" [disabled]="loading || messageForm.invalid">➤</button>
+    </form>
+    
+    <div class="quick-replies">
+      <button class="quick-reply" (click)="sendQuickReply('bouza')">🍨 Bouza</button>
+      <button class="quick-reply" (click)="sendQuickReply('assida')">🍚 Assida</button>
+      <button class="quick-reply" (click)="sendQuickReply('makrouna')">🍝 Makrouna</button>
+      <button class="quick-reply" (click)="sendQuickReply('mes réservations')">📋 Mes réservations</button>
+      <button class="quick-reply" (click)="sendQuickReply('annuler ma réservation')">❌ Annuler</button>
+      <button class="quick-reply" (click)="sendQuickReply('aide')">❓ Aide</button>
+    </div>
+  </div>
+</div>

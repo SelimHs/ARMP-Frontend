@@ -1,0 +1,42 @@
+.alert-danger {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-left: 4px solid #0dcaf0;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+}
+
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}

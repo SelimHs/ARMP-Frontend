@@ -1,0 +1,47 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Liste des Menus</h2>
+    <button class="btn btn-primary" routerLink="/admin/menus/new">
+      + Nouveau Menu
+    </button>
+  </div>
+  
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="row" *ngIf="!loading && menus.length > 0">
+    <div class="col-md-4 mb-3" *ngFor="let menu of menus">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ menu.jour | titlecase }}</h5>
+          <p class="card-text">
+            <strong>Semaine:</strong> {{ formatWeekRange(menu.semaine) }}<br>
+            <strong>Entrée:</strong> {{ menu.entree }}<br>
+            <strong>Plat principal:</strong> {{ menu.plat_principal }}<br>
+            <strong>Dessert:</strong> {{ menu.dessert }}<br>
+            <strong>Disponible:</strong> {{ menu.nombre_disponible }}
+          </p>
+        </div>
+        <div class="card-footer bg-transparent">
+          <button class="btn btn-warning btn-sm me-2" (click)="editMenu(menu.id_menu!)">
+            ✏️ Modifier
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteMenu(menu.id_menu!)">
+            🗑️ Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && menus.length === 0" class="alert alert-info">
+    Aucun menu disponible
+  </div>
+</div>

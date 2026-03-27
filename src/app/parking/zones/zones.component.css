@@ -1,0 +1,9 @@
+.zone-card {
+  transition: all 0.2s ease-in-out;
+  border-radius: 12px;
+}
+
+.zone-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}

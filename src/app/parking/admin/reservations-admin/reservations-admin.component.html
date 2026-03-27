@@ -1,0 +1,87 @@
+<div class="container mt-4">
+
+  <h2 class="fw-bold mb-3">📋 Parking Reservations Management</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <table class="table table-hover align-middle">
+
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Slot</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Update</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let r of reservations; let i = index; trackBy: trackByReservation">
+
+            <td>{{ i + 1 }}</td>
+
+            <td>{{ r.userId }}</td>
+
+            <td>{{ r.slotId }}</td>
+
+            <td>{{ r.start_time | date:'short' }}</td>
+
+            <td>{{ r.end_time | date:'short' }}</td>
+
+            <!-- STATUS BADGE -->
+            <td>
+              <span class="badge"
+                [ngClass]="{
+                  'bg-warning text-dark': r.status === 'PENDING',
+                  'bg-success': r.status === 'CONFIRMED',
+                  'bg-danger': r.status === 'CANCELLED',
+                  'bg-primary': r.status === 'COMPLETED'
+                }">
+                {{ r.status }}
+              </span>
+            </td>
+
+            <!-- STATUS SELECT -->
+            <td>
+              <select class="form-select form-select-sm"
+                      (change)="updateStatus(r.id_reservation, $any($event.target).value)">
+
+                <option *ngFor="let s of statuses"
+                        [value]="s"
+                        [selected]="s === r.status">
+                  {{ s }}
+                </option>
+
+              </select>
+            </td>
+
+            <!-- DELETE -->
+            <td class="text-end">
+              <button class="btn btn-sm btn-danger"
+        (click)="deleteReservation($any(r.id_reservation))">
+  🗑 Delete
+</button>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="reservations.length === 0">
+            <td colspan="8" class="text-center text-muted">
+              No reservations found
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
+</div>

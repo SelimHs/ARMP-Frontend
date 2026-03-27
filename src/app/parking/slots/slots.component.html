@@ -1,0 +1,12 @@
+<h2>Parking Slots</h2>
+
+<div *ngFor="let slot of slots" style="border:1px solid #ccc; padding:12px; margin-bottom:10px;">
+  <h3>Slot {{ slot.slot_number }}</h3>
+  <p><strong>Covered:</strong> {{ slot.is_covered ? 'Yes' : 'No' }}</p>
+  <p><strong>EV Charging:</strong> {{ slot.is_ev_charging ? 'Yes' : 'No' }}</p>
+  <p><strong>Available:</strong> {{ slot.is_available ? 'Yes' : 'No' }}</p>
+
+  <button [disabled]="!slot.is_available" (click)="reserve(slot.id_slot)">
+    Reserve
+  </button>
+</div>
